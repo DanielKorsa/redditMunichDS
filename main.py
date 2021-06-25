@@ -9,12 +9,14 @@ import pandas as pd
 
 from dt_handler import clean_description
 
-#? Most used words in title (Per flair)
+#TODO Most used words in title (Per flair)
+#? Averege N of likes per flair
+#? Number of posts per flair
 
 #? Number of upvotes per flair
 VIZ = {'text_info': False,
-        'flair': True,
-        'weekly_dist': False,
+        'flair': False,
+        'flair_avr_ups': True,
         'daily_dist': False,
         'pet_data': False,
         'wordcloud': False,
@@ -37,7 +39,24 @@ if VIZ['text_info']:
 if VIZ['flair']:
 
     flairs = r_dtst['flair'].value_counts()
-    print(flairs)
-    hista = flairs.hist(bins = len(flairs))
+    #hista = flairs.hist(bins = len(flairs))
+    bar = flairs.plot.bar()
     plt.show()
     #plot_histogram(flairs, 'yolo')
+
+if VIZ['flair_avr_ups']:
+    r_dtst['flair'] = r_dtst['flair'].fillna(value='Not Specified')
+    uniq_flairs = r_dtst['flair'].unique() # Get a list of unique flairs
+    flair_ls = []
+    for uniq_flair in uniq_flairs:
+        flair_ups = r_dtst[r_dtst['flair'].values == uniq_flair]
+        #print(uniq_flair, flair_ups['upvotes'].mean())
+        flair_dict = {}
+        flair_dict['upvotes'] = int(flair_ups['upvotes'].mean())
+        flair_dict['flair'] = uniq_flair
+        flair_ls.append(flair_dict)
+
+    flair_ds = pd.DataFrame(flair_ls).sort_values('upvotes', ascending=False)
+    bar = flair_ds.plot.bar(x='flair', y='upvotes')
+    plt.show()
+

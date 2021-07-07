@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "venv_reddit_muc_ds\\Scripts\\python.exe"
+    "python.pythonPath": "venv_reddit_muc_ds\\Scripts\\python.exe",
+    "python.formatting.provider": "autopep8"
 }
